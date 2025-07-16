@@ -136,3 +136,4 @@ C:\Users\Experto\source\repos\EFCoreSQLiteBooks\EFCoreSQLiteBooks\obj\Debug\net9
 C:\Users\Experto\source\repos\EFCoreSQLiteBooks\EFCoreSQLiteBooks\obj\Debug\net9.0\EFCoreSQLiteBooks.pdb
 C:\Users\Experto\source\repos\EFCoreSQLiteBooks\EFCoreSQLiteBooks\obj\Debug\net9.0\EFCoreSQLiteBooks.genruntimeconfig.cache
 C:\Users\Experto\source\repos\EFCoreSQLiteBooks\EFCoreSQLiteBooks\obj\Debug\net9.0\ref\EFCoreSQLiteBooks.dll
+C:\Users\Experto\source\repos\EFCoreSQLiteBooks\EFCoreSQLiteBooks\obj\Debug\net9.0\EFCoreSQLiteBooks.sourcelink.json
