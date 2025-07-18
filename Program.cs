@@ -57,6 +57,7 @@ namespace EFCoreSQLiteBooks
                 Genero = "Distopía"
             };
 
+            //Crea una lista de la clase libro
             List<Libro> misLibros = new List<Libro>
             {
                 new Libro{
@@ -85,7 +86,7 @@ namespace EFCoreSQLiteBooks
                 }
             };
 
-            // Agregar el nuevo libro al contexto (a la tabla Libros)
+            // Agregar los nuevos libros al contexto (a la tabla Libros)
             if (!db.Libros.Any()) // Solo si no hay ningún libro
             {
                 db.Libros.Add(libro);
