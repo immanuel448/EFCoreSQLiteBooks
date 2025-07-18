@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-//eeee
+
 namespace EFCoreSQLiteBooks
 {
     // Modelo que representa la tabla Libros en la base de datos
