@@ -21,16 +21,17 @@ namespace EFCoreSQLiteBooks
         // Configura la conexión a la base de datos SQLite
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Especifica el archivo donde se guardará la base de datos SQLite
-            string rutaBaseDatos = @"C:\Users\Experto\source\repos\EFCoreSQLiteBooks\EFCoreSQLiteBooks\bin\Debug\net9.0\libros2.db";
+            // Carpeta relativa al proyecto donde se guardará la base
+            string carpeta = Path.Combine(Directory.GetCurrentDirectory(), "Data");
 
-            // Crear carpeta si no existe (por si acaso), incluyendo todas las carpetas intermedias que hicieran falta
-            string carpeta = Path.GetDirectoryName(rutaBaseDatos);
+            // Crear carpeta si no existe
             if (!Directory.Exists(carpeta))
-            {
                 Directory.CreateDirectory(carpeta);
-            }
 
+            // Ruta completa al archivo .db
+            string rutaBaseDatos = Path.Combine(carpeta, "libros2.db");
+
+            // Configurar conexión SQLite
             optionsBuilder.UseSqlite($"Data Source={rutaBaseDatos}");
         }
     }
@@ -44,7 +45,7 @@ namespace EFCoreSQLiteBooks
 
             // Aplica migraciones pendientes para actualizar la estructura de la base
             db.Database.Migrate();
-            //para saber donde esta el archivo
+            //para saber donde esta el archivo, eeee
             Console.WriteLine("📁 Ruta real de la base de datos:");
             Console.WriteLine(Path.GetFullPath("libros2.db"));
 

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj": {}
+    "C:\\Users\\Imman\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj": {
+    "C:\\Users\\Imman\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
+        "projectUniqueName": "C:\\Users\\Imman\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
         "projectName": "EFCoreSQLiteBooks",
-        "projectPath": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
-        "packagesPath": "C:\\Users\\Experto\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\obj\\",
+        "projectPath": "C:\\Users\\Imman\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
+        "packagesPath": "C:\\Users\\Imman\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Imman\\source\\repos\\EFCoreSQLiteBooks\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Experto\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Imman\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -42,7 +42,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -87,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
