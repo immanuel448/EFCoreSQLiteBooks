@@ -21,7 +21,7 @@ namespace EFCoreSQLiteBooks
         // Configura la conexión a la base de datos SQLite
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Obtener la ruta base donde está el proyecto (sube 3 niveles desde bin\Debug\net9.0)
+            // Obtener la ruta base donde está el proyecto (sube 3 niveles desde bin\Debug\net9.0); la carpeta termina quedando donde está el .sln
             string proyectoRaiz = Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.FullName;
 
             // Carpeta "Data" dentro de la raíz del proyecto
@@ -39,8 +39,6 @@ namespace EFCoreSQLiteBooks
         }
     }
 
-
-
     internal class Program
     {
         static void Main()
@@ -50,9 +48,6 @@ namespace EFCoreSQLiteBooks
 
             // Aplica migraciones pendientes para actualizar la estructura de la base
             db.Database.Migrate();
-            //para saber donde esta el archivo, eeeeeeeee
-            Console.WriteLine("📁 Ruta real de la base de datos:");
-            Console.WriteLine(Path.GetFullPath("libros2.db"));
 
             // Crear un nuevo libro con datos iniciales     CREAR ------------------------------------
             var libro = new Libro
