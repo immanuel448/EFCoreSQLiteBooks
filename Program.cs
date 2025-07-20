@@ -15,26 +15,31 @@ namespace EFCoreSQLiteBooks
     // Contexto de EF Core para manejar la base de datos
     public class AppDbContext : DbContext
     {
-        // Representa la tabla Libros en la base de datos
+        // Representa la tabla "Libros" en la base de datos.
         public DbSet<Libro> Libros { get; set; }
 
         // Configura la conexión a la base de datos SQLite
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Carpeta relativa al proyecto donde se guardará la base
-            string carpeta = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            // Obtener la ruta base donde está el proyecto (sube 3 niveles desde bin\Debug\net9.0)
+            string proyectoRaiz = Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.FullName;
 
-            // Crear carpeta si no existe
+            // Carpeta "Data" dentro de la raíz del proyecto
+            string carpeta = Path.Combine(proyectoRaiz, "Data");
+
+            // Crear carpeta "Data" si no existe
             if (!Directory.Exists(carpeta))
                 Directory.CreateDirectory(carpeta);
 
-            // Ruta completa al archivo .db
+            // Ruta completa al archivo libros2.db dentro de Data en la raíz del proyecto
             string rutaBaseDatos = Path.Combine(carpeta, "libros2.db");
 
-            // Configurar conexión SQLite
+            // Configurar EF Core para usar SQLite en la ruta especificada
             optionsBuilder.UseSqlite($"Data Source={rutaBaseDatos}");
         }
     }
+
+
 
     internal class Program
     {
@@ -45,7 +50,7 @@ namespace EFCoreSQLiteBooks
 
             // Aplica migraciones pendientes para actualizar la estructura de la base
             db.Database.Migrate();
-            //para saber donde esta el archivo, eeee
+            //para saber donde esta el archivo, eeeeeeeee
             Console.WriteLine("📁 Ruta real de la base de datos:");
             Console.WriteLine(Path.GetFullPath("libros2.db"));
 
