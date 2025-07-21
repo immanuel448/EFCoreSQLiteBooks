@@ -15,7 +15,8 @@ namespace EFCoreSQLiteBooks
 
         public void AgregarLibro()
         {
-            Console.WriteLine("\n--- Agregar nuevo libro ---");
+            //agregar un libro desde consola
+            Console.WriteLine("\n--- AGREGAR NUEVO LIBRO ---");
 
             Console.Write("Título: ");
             string titulo = Console.ReadLine();

@@ -46,7 +46,7 @@ namespace EFCoreSQLiteBooks
         {
             // Crear instancia del contexto para trabajar con la base de datos
             using var db = new AppDbContext();
-
+            // Aplica migraciones pendientes para actualizar la estructura de la base
             db.Database.Migrate();
 
             var gestor = new GestorLibros(db);
@@ -54,55 +54,6 @@ namespace EFCoreSQLiteBooks
             MostrarMenu(gestor);
 
 
-            // Aplica migraciones pendientes para actualizar la estructura de la base
-            db.Database.Migrate();
-
-            // Crear un nuevo libro con datos iniciales     CREAR ------------------------------------
-            var libro = new Libro
-            {
-                Titulo = "1984",
-                Autor = "George Orwell",
-                AnhoPublicacion = 1949,
-                Genero = "Distopía"
-            };
-
-            //Crea una lista de la clase libro
-            List<Libro> misLibros = new List<Libro>
-            {
-                new Libro{
-                    Titulo = "Cien años de soledad",
-                    Autor = "Gabriel García Márquez",
-                    AnhoPublicacion = 1967,
-                    Genero = "Realismo mágico"
-                },
-                new Libro{
-                    Titulo = "Orgullo y prejuicio",
-                    Autor = "Jane Austen",
-                    AnhoPublicacion = 1813,
-                    Genero = "Romance"
-                },
-                new Libro{
-                    Titulo = "El gran Gatsby",
-                    Autor = "F. Scott Fitzgerald",
-                    AnhoPublicacion = 1925,
-                    Genero = "Ficción"
-                },
-                new Libro{
-                    Titulo = "El Principito",
-                    Autor = "Antoine de Saint-Exupéry",
-                    AnhoPublicacion = 1943,
-                    Genero = "Fábula"
-                }
-            };
-
-            // Agregar los nuevos libros al contexto (a la tabla Libros)
-            if (!db.Libros.Any()) // Solo si no hay ningún libro
-            {
-                db.Libros.Add(libro);
-                db.Libros.AddRange(misLibros);
-                // Guardar los cambios en la base de datos (ejecutar INSERT)
-                db.SaveChanges();
-            }
         
             // Obtener todos los libros almacenados en la base LEER ------------------------------------
             var libros = db.Libros.ToList();
@@ -144,7 +95,7 @@ namespace EFCoreSQLiteBooks
         {
             while (true)
             {
-                Console.WriteLine("\n--- Menú de Libros ---");
+                Console.WriteLine("\n--- MENÙ DE LIBROS ---");
                 Console.WriteLine("1. Agregar libro");
                 Console.WriteLine("2. Ver todos los libros");
                 Console.WriteLine("3. Buscar libro por ID");
