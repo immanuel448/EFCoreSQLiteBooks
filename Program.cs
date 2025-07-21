@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace EFCoreSQLiteBooks
 {
@@ -45,6 +46,13 @@ namespace EFCoreSQLiteBooks
         {
             // Crear instancia del contexto para trabajar con la base de datos
             using var db = new AppDbContext();
+
+            db.Database.Migrate();
+
+            var gestor = new GestorLibros(db);
+
+            MostrarMenu(gestor);
+
 
             // Aplica migraciones pendientes para actualizar la estructura de la base
             db.Database.Migrate();
@@ -131,5 +139,33 @@ namespace EFCoreSQLiteBooks
             // Esperar a que el usuario presione una tecla para cerrar la consola
             Console.ReadKey();
         }
+
+        static void MostrarMenu(GestorLibros gestor)
+        {
+            while (true)
+            {
+                Console.WriteLine("\n--- Menú de Libros ---");
+                Console.WriteLine("1. Agregar libro");
+                Console.WriteLine("2. Ver todos los libros");
+                Console.WriteLine("3. Buscar libro por ID");
+                Console.WriteLine("4. Editar libro");
+                Console.WriteLine("5. Eliminar libro");
+                Console.WriteLine("6. Salir");
+                Console.Write("Selecciona una opción: ");
+
+                string opcion = Console.ReadLine();
+                switch (opcion)
+                {
+                    case "1": gestor.AgregarLibro(); break;
+                    case "2": gestor.MostrarLibros(); break;
+                    case "3": gestor.BuscarLibroPorId(); break;
+                    case "4": gestor.EditarLibro(); break;
+                    case "5": gestor.EliminarLibro(); break;
+                    case "6": return;
+                    default: Console.WriteLine("Opción no válida."); break;
+                }
+            }
+        }
+
     }
 }
