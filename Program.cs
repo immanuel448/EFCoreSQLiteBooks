@@ -53,42 +53,16 @@ namespace EFCoreSQLiteBooks
 
             MostrarMenu(gestor);
 
-
-        
-            // Obtener todos los libros almacenados en la base LEER ------------------------------------
-            var libros = db.Libros.ToList();
-
-            // Mostrar en consola los libros encontrados
-            Console.WriteLine("Libros en la base de datos:");
-            foreach (var l in libros)
-            {
-                Console.WriteLine($"{l.Id}: {l.Titulo} - {l.Autor} ({l.AnhoPublicacion}) [{l.Genero}]");
-            }
-
-            // Buscar el primer libro para actualizarlo, ACTUALIZAR ------------------------------------
-            var libroActualizar = db.Libros.FirstOrDefault();
-            if (libroActualizar != null)
-            {
-                // Cambiar el género del libro
-                libroActualizar.Genero = "Ciencia Ficción";
-
-                // Guardar la actualización en la base (ejecutar UPDATE)
-                db.SaveChanges();
-            }
-
-            // Buscar el primer libro para eliminarlo
-            var libroEliminar = db.Libros.FirstOrDefault();
-            if (libroEliminar != null)
-            {
-                // Remover el libro del contexto (marcar para eliminar)
-                db.Libros.Remove(libroEliminar);
-
-                // Guardar los cambios en la base (ejecutar DELETE)
-                db.SaveChanges();
-            }
-
             // Esperar a que el usuario presione una tecla para cerrar la consola
             Console.ReadKey();
+
+
+
+
+
+
+
+
         }
 
         static void MostrarMenu(GestorLibros gestor)

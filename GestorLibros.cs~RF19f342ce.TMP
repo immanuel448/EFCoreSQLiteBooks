@@ -63,24 +63,15 @@ namespace EFCoreSQLiteBooks
 
         public void BuscarLibroPorId()
         {
-            bool validarID = int.TryParse(Console.ReadLine(), out int IDsolicitado) && IDsolicitado > 0;
-
+            Console.WriteLine("Ingrese el ID del libro para buscarlo.");
+            bool validarID = int.TryParse(Console.ReadLine(), out int numID) && numID > 0;
             if (validarID)
             {
-                var libroElejido = _db.Libros.FirstOrDefault(l => l.Id == IDsolicitado);
-                if (libroElejido != null)
-                {
-                        Console.WriteLine($"El libro correspondiente al ID: {IDsolicitado} es:");
-                        Console.WriteLine($"{libroElejido.Id}: {libroElejido.Titulo} - {libroElejido.Autor} ({libroElejido.AnhoPublicacion}) [{libroElejido.Genero}]");
-                }
-                else
-                {
-                    Console.WriteLine($"El libro con el id: {IDsolicitado}, no se ha encontrado");
-                }
+                var seleccionID = 
             }
             else
             {
-                Console.WriteLine("Error!!, Debe elegir un valor numérico entero mayor a cero como ID");
+                Console.WriteLine("Debe ingresar un número entero válido");
             }
         }
 
