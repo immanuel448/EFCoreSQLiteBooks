@@ -55,14 +55,6 @@ namespace EFCoreSQLiteBooks
 
             // Esperar a que el usuario presione una tecla para cerrar la consola
             Console.ReadKey();
-
-
-
-
-
-
-
-
         }
 
         static void MostrarMenu(GestorLibros gestor)

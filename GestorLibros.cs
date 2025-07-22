@@ -63,23 +63,36 @@ namespace EFCoreSQLiteBooks
 
         public void BuscarLibroPorId()
         {
+            // Mostrar mensaje para pedir al usuario que ingrese el ID del libro
+            Console.WriteLine("Ingrese el ID del libro para buscar:");
+
+            // Leer la entrada del usuario y tratar de convertirla a entero.
+            // 'validarID' será true si la conversión es exitosa y el número es mayor que cero.
             bool validarID = int.TryParse(Console.ReadLine(), out int IDsolicitado) && IDsolicitado > 0;
 
+            // Si el ID es válido (entero y mayor que cero), procedemos a buscar el libro
             if (validarID)
             {
+                // Buscar el primer libro en la base de datos que tenga el ID igual al solicitado
+                // Si no lo encuentra, 'libroElejido' será null
                 var libroElejido = _db.Libros.FirstOrDefault(l => l.Id == IDsolicitado);
+
+                // Comprobar si se encontró un libro con ese ID
                 if (libroElejido != null)
                 {
-                        Console.WriteLine($"El libro correspondiente al ID: {IDsolicitado} es:");
-                        Console.WriteLine($"{libroElejido.Id}: {libroElejido.Titulo} - {libroElejido.Autor} ({libroElejido.AnhoPublicacion}) [{libroElejido.Genero}]");
+                    // Mostrar información del libro encontrado
+                    Console.WriteLine($"El libro correspondiente al ID: {IDsolicitado} es:");
+                    Console.WriteLine($"{libroElejido.Titulo} - {libroElejido.Autor} ({libroElejido.AnhoPublicacion}) [{libroElejido.Genero}]");
                 }
                 else
                 {
+                    // Mensaje cuando no existe un libro con el ID ingresado
                     Console.WriteLine($"El libro con el id: {IDsolicitado}, no se ha encontrado");
                 }
             }
             else
             {
+                // Mensaje de error si el ID no es un número entero válido mayor que cero
                 Console.WriteLine("Error!!, Debe elegir un valor numérico entero mayor a cero como ID");
             }
         }
@@ -100,15 +113,45 @@ namespace EFCoreSQLiteBooks
 
         public void EliminarLibro()
         {
-            // Buscar el primer libro para eliminarlo
-            var libroEliminar = _db.Libros.FirstOrDefault();
-            if (libroEliminar != null)
-            {
-                // Remover el libro del contexto (marcar para eliminar)
-                _db.Libros.Remove(libroEliminar);
+            Console.WriteLine("Ingrese el ID del libro para ser eliminado:");
+            bool validarID = int.TryParse(Console.ReadLine(), out int IDsolicitado) && IDsolicitado > 0;
 
-                // Guardar los cambios en la base (ejecutar DELETE)
-                _db.SaveChanges();
+            if (validarID)
+            {
+                // Buscar el libro por ID en la base de datos
+                var libroElegido = _db.Libros.FirstOrDefault(l => l.Id == IDsolicitado);
+
+                if (libroElegido != null)
+                {
+                    // Mostrar información para confirmar eliminación
+                    Console.WriteLine($"Libro encontrado: {libroElegido.Titulo} - {libroElegido.Autor} ({libroElegido.AnhoPublicacion})");
+                    Console.Write("¿Está seguro que desea eliminar este libro? (S/N): ");
+                    string confirmar = Console.ReadLine()?.Trim().ToUpper();
+
+                    if (confirmar == "S")
+                    {
+                        // Marcar el libro para eliminación en el contexto
+                        _db.Libros.Remove(libroElegido);
+
+                        // Guardar cambios en la base de datos (se ejecuta DELETE)
+                        _db.SaveChanges();
+
+                        Console.WriteLine($"El libro con ID {IDsolicitado} ha sido eliminado exitosamente.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Eliminación cancelada.");
+                    }
+                }
+                else
+                {
+                    //la obntención del libro en base al id, rtesultò en null, por lo tanto no se encontró el libro
+                    Console.WriteLine($"No se encontró ningún libro con el ID {IDsolicitado}.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: debe ingresar un número entero mayor a cero como ID.");
             }
         }
     }
