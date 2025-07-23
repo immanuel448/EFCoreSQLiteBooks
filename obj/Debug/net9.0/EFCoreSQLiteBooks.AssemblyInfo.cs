@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EFCoreSQLiteBooks")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d110abb9e094f9ec077bf4064e8125618767f7bd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6107657be755be9bff1cbac58ab1abd92f39d2c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("EFCoreSQLiteBooks")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EFCoreSQLiteBooks")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
