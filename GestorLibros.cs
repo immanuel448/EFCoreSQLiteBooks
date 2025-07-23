@@ -99,9 +99,9 @@ namespace EFCoreSQLiteBooks
 
         public void EditarLibro()
         {
+            //validar el id
             Console.WriteLine("Ingrese el ID del libro para ser editado:");
             bool validarID = int.TryParse(Console.ReadLine(), out int IDsolicitado) && IDsolicitado > 0;
-
             if (!validarID)
             {
                 Console.WriteLine("Error: debe ingresar un número entero mayor a cero como ID.");
@@ -126,42 +126,41 @@ namespace EFCoreSQLiteBooks
                 return;
             }
 
-
-            // Nuevos datos para el libro
+            // Nuevos datos para el libro ----------------------
+            Console.WriteLine($"Título actual: {libroElegido.Titulo}");
             Console.Write("Nuevo título (deje vacío para conservar el dato actual): ");
             string nuevoDato = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(nuevoDato))
             {
                 libroElegido.Titulo = nuevoDato;
             }
-            Console.Write("Nuevo autor: (deje vació para concervar el dato actual): ");
+            Console.Write("Nuevo autor: (deje vacío para conservar el dato actual): ");
+            Console.WriteLine($"Autor actual: {libroElegido.Autor}");
             nuevoDato = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(nuevoDato))
             {
                 libroElegido.Autor = nuevoDato;
             }
-            Console.Write("Nuevo año de publicación: (deje vació para concervar el dato actual): ");
+            Console.WriteLine($"Año de publicación actual: {libroElegido.AnhoPublicacion}");
+            Console.Write("Nuevo año de publicación: (deje vacío para conservar el dato actual): ");
             nuevoDato = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(nuevoDato))
             {
                 bool resultado = int.TryParse(nuevoDato, out int datoEntero);
                 libroElegido.AnhoPublicacion = resultado ? datoEntero : libroElegido.AnhoPublicacion; // Si no es un número, se conserva el dato actual
             }
-            Console.Write("Nuevo género: (deje vació para concervar el dato actual): ");
+            Console.WriteLine($"Género actual: {libroElegido.Genero}");
+            Console.Write("Nuevo género: (deje vacío para conservar el dato actual): ");
             nuevoDato = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(nuevoDato))
             {
                 libroElegido.Genero = nuevoDato;
             }
 
-            // Guardar cambios en la base de datos (se ejecuta DELETE)
+            // Guardar cambios en la base de datos (se ejecuta UPDATE)
             _db.SaveChanges();
 
             Console.WriteLine($"El libro con ID {IDsolicitado} ha sido modificado exitosamente.");
-
-
-
-
         }
 
         public void EliminarLibro()
