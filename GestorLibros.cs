@@ -15,14 +15,12 @@ namespace EFCoreSQLiteBooks
 
         public void AgregarLibro()
         {
-            //agregar un libro desde consola
             Console.WriteLine("\n--- AGREGAR NUEVO LIBRO ---");
 
-            Console.Write("Título: ");
-            string titulo = Console.ReadLine();
-
-            Console.Write("Autor: ");
-            string autor = Console.ReadLine();
+            //se hace uso de la clase genérica solicitarDatoActualizado para solicitar los datos del libro
+            string titulo = SolicitarDatoActualizado("Título", "");
+            string autor = SolicitarDatoActualizado("Autor", "");
+            string genero = SolicitarDatoActualizado("Género", "");
 
             Console.Write("Año de publicación: ");
             int anho;
@@ -30,9 +28,6 @@ namespace EFCoreSQLiteBooks
             {
                 Console.Write("Por favor, introduce un año válido: ");
             }
-
-            Console.Write("Género: ");
-            string genero = Console.ReadLine();
 
             var nuevoLibro = new Libro
             {
@@ -47,6 +42,7 @@ namespace EFCoreSQLiteBooks
 
             Console.WriteLine("✅ Libro agregado correctamente.");
         }
+
 
         public void MostrarLibros()
         {
@@ -71,30 +67,24 @@ namespace EFCoreSQLiteBooks
             bool validarID = int.TryParse(Console.ReadLine(), out int IDsolicitado) && IDsolicitado > 0;
 
             // Si el ID es válido (entero y mayor que cero), procedemos a buscar el libro
-            if (validarID)
-            {
-                // Buscar el primer libro en la base de datos que tenga el ID igual al solicitado
-                // Si no lo encuentra, 'libroElejido' será null
-                var libroElejido = _db.Libros.FirstOrDefault(l => l.Id == IDsolicitado);
-
-                // Comprobar si se encontró un libro con ese ID
-                if (libroElejido != null)
-                {
-                    // Mostrar información del libro encontrado
-                    Console.WriteLine($"El libro correspondiente al ID: {IDsolicitado} es:");
-                    Console.WriteLine($"{libroElejido.Titulo} - {libroElejido.Autor} ({libroElejido.AnhoPublicacion}) [{libroElejido.Genero}]");
-                }
-                else
-                {
-                    // Mensaje cuando no existe un libro con el ID ingresado
-                    Console.WriteLine($"El libro con el id: {IDsolicitado}, no se ha encontrado");
-                }
-            }
-            else
+            if (!validarID)
             {
                 // Mensaje de error si el ID no es un número entero válido mayor que cero
                 Console.WriteLine("Error!!, Debe elegir un valor numérico entero mayor a cero como ID");
+                return;
             }
+
+                // Buscar el primer libro en la base de datos que tenga el ID igual al solicitado; si no lo encuentra, 'libroElejido' será null
+                var libroElejido = _db.Libros.FirstOrDefault(l => l.Id == IDsolicitado);
+                if (libroElejido == null)
+                {
+                    // Mensaje cuando no existe un libro con el ID ingresado
+                    Console.WriteLine($"El libro con el id: {IDsolicitado}, no se ha encontrado");
+                    return;
+                }
+            // Mostrar información del libro encontrado
+            Console.WriteLine($"El libro correspondiente al ID: {IDsolicitado} es:");
+            Console.WriteLine($"{libroElejido.Titulo} - {libroElejido.Autor} ({libroElejido.AnhoPublicacion}) [{libroElejido.Genero}]");
         }
 
         public void EditarLibro()
@@ -118,6 +108,7 @@ namespace EFCoreSQLiteBooks
 
             // Mostrar información para confirmar edición
             Console.WriteLine($"Libro elejido: \"{libroElegido.Titulo}\" de {libroElegido.Autor} ({libroElegido.AnhoPublicacion}) - Género: {libroElegido.Genero}");
+            
             Console.Write("¿Está seguro que desea modificar este libro? (S/N): ");
             string confirmar = Console.ReadLine()?.Trim().ToUpper();
             if (confirmar != "S")
@@ -126,85 +117,73 @@ namespace EFCoreSQLiteBooks
                 return;
             }
 
-            // Nuevos datos para el libro ----------------------
-            Console.WriteLine($"Título actual: {libroElegido.Titulo}");
-            Console.Write("Nuevo título (deje vacío para conservar el dato actual): ");
-            string nuevoDato = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(nuevoDato))
+            // Mostrar y actualizar los campos de forma más limpia
+            libroElegido.Titulo = SolicitarDatoActualizado("Título", libroElegido.Titulo);
+            libroElegido.Autor = SolicitarDatoActualizado("Autor", libroElegido.Autor);
+            libroElegido.Genero = SolicitarDatoActualizado("Género", libroElegido.Genero);
+
+            string nuevoAnho = SolicitarDatoActualizado("Año de publicación", libroElegido.AnhoPublicacion.ToString());
+            if (int.TryParse(nuevoAnho, out int anho))
             {
-                libroElegido.Titulo = nuevoDato;
-            }
-            Console.Write("Nuevo autor: (deje vacío para conservar el dato actual): ");
-            Console.WriteLine($"Autor actual: {libroElegido.Autor}");
-            nuevoDato = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(nuevoDato))
-            {
-                libroElegido.Autor = nuevoDato;
-            }
-            Console.WriteLine($"Año de publicación actual: {libroElegido.AnhoPublicacion}");
-            Console.Write("Nuevo año de publicación: (deje vacío para conservar el dato actual): ");
-            nuevoDato = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(nuevoDato))
-            {
-                bool resultado = int.TryParse(nuevoDato, out int datoEntero);
-                libroElegido.AnhoPublicacion = resultado ? datoEntero : libroElegido.AnhoPublicacion; // Si no es un número, se conserva el dato actual
-            }
-            Console.WriteLine($"Género actual: {libroElegido.Genero}");
-            Console.Write("Nuevo género: (deje vacío para conservar el dato actual): ");
-            nuevoDato = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(nuevoDato))
-            {
-                libroElegido.Genero = nuevoDato;
+                libroElegido.AnhoPublicacion = anho;
             }
 
-            // Guardar cambios en la base de datos (se ejecuta UPDATE)
+            // Guardar cambios en la base de datos
             _db.SaveChanges();
+
 
             Console.WriteLine($"El libro con ID {IDsolicitado} ha sido modificado exitosamente.");
         }
+
+        //se refactoriza el còdigo para la edición
+        private static string SolicitarDatoActualizado(string campo, string valorActual = "")
+        {
+            if (!string.IsNullOrEmpty(valorActual))
+                Console.WriteLine($"{campo} actual: {valorActual}");
+
+            Console.Write($"Nuevo {campo}{(string.IsNullOrEmpty(valorActual) ? "" : " (deje vacío para conservar el dato actual)")}: ");
+            string entrada = Console.ReadLine();
+            return string.IsNullOrWhiteSpace(entrada) ? valorActual : entrada;
+        }
+
 
         public void EliminarLibro()
         {
             Console.WriteLine("Ingrese el ID del libro para ser eliminado:");
             bool validarID = int.TryParse(Console.ReadLine(), out int IDsolicitado) && IDsolicitado > 0;
 
-            if (validarID)
+            if (!validarID)
             {
+                Console.WriteLine("Error: debe ingresar un número entero mayor a cero como ID.");
+                return;
+            }
                 // Buscar el libro por ID en la base de datos
                 var libroElegido = _db.Libros.FirstOrDefault(l => l.Id == IDsolicitado);
 
-                if (libroElegido != null)
-                {
-                    // Mostrar información para confirmar eliminación
-                    Console.WriteLine($"Libro encontrado: {libroElegido.Titulo} - {libroElegido.Autor} ({libroElegido.AnhoPublicacion})");
-                    Console.Write("¿Está seguro que desea eliminar este libro? (S/N): ");
-                    string confirmar = Console.ReadLine()?.Trim().ToUpper();
-
-                    if (confirmar == "S")
-                    {
-                        // Marcar el libro para eliminación en el contexto
-                        _db.Libros.Remove(libroElegido);
-
-                        // Guardar cambios en la base de datos (se ejecuta DELETE)
-                        _db.SaveChanges();
-
-                        Console.WriteLine($"El libro con ID {IDsolicitado} ha sido eliminado exitosamente.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Eliminación cancelada.");
-                    }
-                }
-                else
-                {
-                    //la obntención del libro en base al id, rtesultò en null, por lo tanto no se encontró el libro
-                    Console.WriteLine($"No se encontró ningún libro con el ID {IDsolicitado}.");
-                }
-            }
-            else
+            if (libroElegido == null)
             {
-                Console.WriteLine("Error: debe ingresar un número entero mayor a cero como ID.");
+                //la obntención del libro en base al id, resultó en null, por lo tanto no se encontró el libro
+                Console.WriteLine($"No se encontró ningún libro con el ID {IDsolicitado}.");
+                return;
             }
+
+            // Mostrar información para confirmar eliminación
+            Console.WriteLine($"Libro encontrado: {libroElegido.Titulo} - {libroElegido.Autor} ({libroElegido.AnhoPublicacion})");
+            
+            Console.Write("¿Está seguro que desea eliminar este libro? (S/N): ");
+            string confirmar = Console.ReadLine()?.Trim().ToUpper();
+            if (confirmar != "S")
+            {
+                Console.WriteLine("Eliminación cancelada.");
+                return;
+            }
+            // Marcar el libro para eliminación en el contexto
+            _db.Libros.Remove(libroElegido);
+
+            // Guardar cambios en la base de datos (se ejecuta DELETE)
+            _db.SaveChanges();
+
+            Console.WriteLine($"El libro con ID {IDsolicitado} ha sido eliminado exitosamente.");
         }
     }
 }
