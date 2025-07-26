@@ -14,32 +14,40 @@ namespace EFCoreSQLiteBooks
 
         public void AgregarLibro()
         {
-            Console.WriteLine("\n--- AGREGAR NUEVO LIBRO ---");
-
-            string titulo = SolicitarCampoNoVacio("Título");
-            string autor = SolicitarCampoNoVacio("Autor");
-            string genero = SolicitarCampoNoVacio("Género");
-
-            Console.Write("Año de publicación: ");
-            int anho;
-            int anhoActual = DateTime.Now.Year;
-            while (!int.TryParse(Console.ReadLine(), out anho) || anho < 0 || anho > anhoActual)
+            try
             {
-                Console.Write("Por favor, introduce un año válido: ");
+                Console.WriteLine("\n--- AGREGAR NUEVO LIBRO ---");
+                string titulo = SolicitarCampoNoVacio("Título");
+                string autor = SolicitarCampoNoVacio("Autor");
+                string genero = SolicitarCampoNoVacio("Género");
+
+                Console.Write("Año de publicación: ");
+                int anho;
+                int anhoActual = DateTime.Now.Year;
+                while (!int.TryParse(Console.ReadLine(), out anho) || anho < 0 || anho > anhoActual)
+                {
+                    Console.Write("Por favor, introduce un año válido: ");
+                }
+
+                var nuevoLibro = new Libro
+                {
+                    Titulo = titulo,
+                    Autor = autor,
+                    AnhoPublicacion = anho,
+                    Genero = genero
+                };
+
+                _db.Libros.Add(nuevoLibro);
+                _db.SaveChanges();
+
+                Console.WriteLine("✅ Libro agregado correctamente.");
+
             }
-
-            var nuevoLibro = new Libro
+            catch (Exception ex)
             {
-                Titulo = titulo,
-                Autor = autor,
-                AnhoPublicacion = anho,
-                Genero = genero
-            };
-
-            _db.Libros.Add(nuevoLibro);
-            _db.SaveChanges();
-
-            Console.WriteLine("✅ Libro agregado correctamente.");
+                Console.WriteLine("❌ Ocurrió un error al agregar el libro.");
+                Console.WriteLine($"🛠️ Detalles técnicos: {ex.Message}");
+            }
         }
 
         private static string SolicitarCampoNoVacio(string campo)
@@ -68,26 +76,41 @@ namespace EFCoreSQLiteBooks
         }
 
         // Método reutilizable que busca un libro por ID y devuelve una tupla (bool encontrado, Libro libro)
+        /// <summary>
+        /// Busca un libro por ID con validación y manejo de errores.
+        /// Devuelve una tupla con un bool indicando si se encontró,
+        /// y el libro (o null si no existe).
+        /// </summary>
         private (bool, Libro?) BuscarLibroPorId(string accion)
         {
-            Console.Write($"Ingrese el ID del libro para {accion}: ");
-            bool valido = int.TryParse(Console.ReadLine(), out int id) && id > 0;
-
-            if (!valido)
+            try
             {
-                Console.WriteLine("❌ Error: debe ingresar un número entero mayor que cero como ID.");
-                return (false, null);
-            }
+                Console.Write($"Ingrese el ID del libro para {accion}: ");
+                bool valido = int.TryParse(Console.ReadLine(), out int id) && id > 0;
 
-            var libro = _db.Libros.FirstOrDefault(l => l.Id == id);
-            if (libro == null)
+                if (!valido)
+                {
+                    Console.WriteLine("❌ Error: debe ingresar un número entero mayor que cero como ID.");
+                    return (false, null);
+                }
+
+                var libro = _db.Libros.FirstOrDefault(l => l.Id == id);
+                if (libro == null)
+                {
+                    Console.WriteLine($"❌ No se encontró ningún libro con el ID {id}.");
+                    return (false, null);
+                }
+
+                return (true, libro); // Éxito: libro encontrado
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine($"❌ No se encontró ningún libro con el ID {id}.");
-                return (false, null);
+                Console.WriteLine("❌ Ocurrió un error al buscar el libro.");
+                Console.WriteLine($"🛠️ Detalles técnicos: {ex.Message}");
+                return (false, null); // Corrige el valor lógico aquí
             }
-
-            return (true, libro);
         }
+
 
         public void BuscarLibroPorId()
         {
