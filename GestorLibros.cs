@@ -41,7 +41,6 @@ namespace EFCoreSQLiteBooks
                 _db.SaveChanges();
 
                 Console.WriteLine("✅ Libro agregado correctamente.");
-
             }
             catch (Exception ex)
             {
@@ -50,37 +49,28 @@ namespace EFCoreSQLiteBooks
             }
         }
 
-        private static string SolicitarCampoNoVacio(string campo)
-        {
-            string valor;
-            do
-            {
-                Console.Write($"{campo}: ");
-                valor = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(valor))
-                    Console.WriteLine($"⚠️ El {campo.ToLower()} no puede estar vacío.");
-            } while (string.IsNullOrWhiteSpace(valor));
-
-            return valor;
-        }
-
         public void MostrarLibros()
         {
-            var libros = _db.Libros.ToList();
-
-            Console.WriteLine("\n--- LIBROS EN LA BASE DE DATOS ---");
-            foreach (var l in libros)
+            try
             {
-                Console.WriteLine($"{l.Id}: {l.Titulo} - {l.Autor} ({l.AnhoPublicacion}) [{l.Genero}]");
+                var libros = _db.Libros.ToList();
+
+                Console.WriteLine("\n--- LIBROS EN LA BASE DE DATOS ---");
+                foreach (var l in libros)
+                {
+                    Console.WriteLine($"{l.Id}: {l.Titulo} - {l.Autor} ({l.AnhoPublicacion}) [{l.Genero}]");
+                }
+
+                if (!libros.Any())
+                    Console.WriteLine("📭 No hay libros registrados.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Ocurrió un error al mostrar los libros.");
+                Console.WriteLine($"🛠️ Detalles técnicos: {ex.Message}");
             }
         }
 
-        // Método reutilizable que busca un libro por ID y devuelve una tupla (bool encontrado, Libro libro)
-        /// <summary>
-        /// Busca un libro por ID con validación y manejo de errores.
-        /// Devuelve una tupla con un bool indicando si se encontró,
-        /// y el libro (o null si no existe).
-        /// </summary>
         private (bool, Libro?) BuscarLibroPorId(string accion)
         {
             try
@@ -101,16 +91,15 @@ namespace EFCoreSQLiteBooks
                     return (false, null);
                 }
 
-                return (true, libro); // Éxito: libro encontrado
+                return (true, libro);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("❌ Ocurrió un error al buscar el libro.");
                 Console.WriteLine($"🛠️ Detalles técnicos: {ex.Message}");
-                return (false, null); // Corrige el valor lógico aquí
+                return (false, null);
             }
         }
-
 
         public void BuscarLibroPorId()
         {
@@ -123,31 +112,83 @@ namespace EFCoreSQLiteBooks
 
         public void EditarLibro()
         {
-            var (encontrado, libro) = BuscarLibroPorId("editar");
-            if (!encontrado || libro == null) return;
-
-            Console.WriteLine($"📘 Libro elegido: \"{libro.Titulo}\" de {libro.Autor} ({libro.AnhoPublicacion}) - Género: {libro.Genero}");
-
-            Console.Write("¿Está seguro que desea modificar este libro? (S/N): ");
-            string confirmar = Console.ReadLine()?.Trim().ToUpper();
-            if (confirmar != "S")
+            try
             {
-                Console.WriteLine("✋ Modificación cancelada.");
-                return;
+                var (encontrado, libro) = BuscarLibroPorId("editar");
+                if (!encontrado || libro == null) return;
+
+                Console.WriteLine($"📘 Libro elegido: \"{libro.Titulo}\" de {libro.Autor} ({libro.AnhoPublicacion}) - Género: {libro.Genero}");
+
+                Console.Write("¿Está seguro que desea modificar este libro? (S/N): ");
+                string confirmar = Console.ReadLine()?.Trim().ToUpper();
+                if (confirmar != "S")
+                {
+                    Console.WriteLine("✋ Modificación cancelada.");
+                    return;
+                }
+
+                // Solicita nuevos datos, permitiendo conservar los actuales
+                libro.Titulo = SolicitarDatoActualizado("Título", libro.Titulo);
+                libro.Autor = SolicitarDatoActualizado("Autor", libro.Autor);
+                libro.Genero = SolicitarDatoActualizado("Género", libro.Genero);
+
+                string nuevoAnho = SolicitarDatoActualizado("Año de publicación", libro.AnhoPublicacion.ToString());
+                if (int.TryParse(nuevoAnho, out int anho) && anho > 0 && anho <= DateTime.Now.Year)
+                {
+                    libro.AnhoPublicacion = anho;
+                }
+
+                _db.SaveChanges();
+                Console.WriteLine($"✅ El libro con ID {libro.Id} ha sido modificado exitosamente.");
             }
-
-            libro.Titulo = SolicitarDatoActualizado("Título", libro.Titulo);
-            libro.Autor = SolicitarDatoActualizado("Autor", libro.Autor);
-            libro.Genero = SolicitarDatoActualizado("Género", libro.Genero);
-
-            string nuevoAnho = SolicitarDatoActualizado("Año de publicación", libro.AnhoPublicacion.ToString());
-            if (int.TryParse(nuevoAnho, out int anho) && anho > 0 && anho <= DateTime.Now.Year)
+            catch (Exception ex)
             {
-                libro.AnhoPublicacion = anho;
+                Console.WriteLine("❌ Ocurrió un error al editar el libro.");
+                Console.WriteLine($"🛠️ Detalles técnicos: {ex.Message}");
             }
+        }
 
-            _db.SaveChanges();
-            Console.WriteLine($"✅ El libro con ID {libro.Id} ha sido modificado exitosamente.");
+        public void EliminarLibro()
+        {
+            try
+            {
+                var (encontrado, libro) = BuscarLibroPorId("eliminar");
+                if (!encontrado || libro == null) return;
+
+                Console.WriteLine($"📕 Libro encontrado: {libro.Titulo} - {libro.Autor} ({libro.AnhoPublicacion})");
+
+                Console.Write("¿Está seguro que desea eliminar este libro? (S/N): ");
+                string confirmar = Console.ReadLine()?.Trim().ToUpper();
+                if (confirmar != "S")
+                {
+                    Console.WriteLine("✋ Eliminación cancelada.");
+                    return;
+                }
+
+                _db.Libros.Remove(libro);
+                _db.SaveChanges();
+
+                Console.WriteLine($"🗑️ Libro con ID {libro.Id} eliminado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Ocurrió un error al eliminar el libro.");
+                Console.WriteLine($"🛠️ Detalles técnicos: {ex.Message}");
+            }
+        }
+
+        private static string SolicitarCampoNoVacio(string campo)
+        {
+            string valor;
+            do
+            {
+                Console.Write($"{campo}: ");
+                valor = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(valor))
+                    Console.WriteLine($"⚠️ El {campo.ToLower()} no puede estar vacío.");
+            } while (string.IsNullOrWhiteSpace(valor));
+
+            return valor;
         }
 
         private static string SolicitarDatoActualizado(string campo, string valorActual = "")
@@ -158,27 +199,6 @@ namespace EFCoreSQLiteBooks
             Console.Write($"Nuevo {campo}{(string.IsNullOrEmpty(valorActual) ? "" : " (deje vacío para conservar el dato actual)")}: ");
             string entrada = Console.ReadLine();
             return string.IsNullOrWhiteSpace(entrada) ? valorActual : entrada;
-        }
-
-        public void EliminarLibro()
-        {
-            var (encontrado, libro) = BuscarLibroPorId("eliminar");
-            if (!encontrado || libro == null) return;
-
-            Console.WriteLine($"📕 Libro encontrado: {libro.Titulo} - {libro.Autor} ({libro.AnhoPublicacion})");
-
-            Console.Write("¿Está seguro que desea eliminar este libro? (S/N): ");
-            string confirmar = Console.ReadLine()?.Trim().ToUpper();
-            if (confirmar != "S")
-            {
-                Console.WriteLine("✋ Eliminación cancelada.");
-                return;
-            }
-
-            _db.Libros.Remove(libro);
-            _db.SaveChanges();
-
-            Console.WriteLine($"🗑️ Libro con ID {libro.Id} eliminado correctamente.");
         }
     }
 }
