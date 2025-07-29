@@ -86,7 +86,7 @@ El archivo `GestorLibros.db` se genera automáticamente en la carpeta del proyec
 
 ## 👨‍💻 Autor
 
-**https://github.com/immanuel448**  
+**[immanuel448](https://github.com/immanuel448)**  
 Proyecto educativo para reforzar habilidades en EF Core.
 
 ---
