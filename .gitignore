@@ -1,8 +1,48 @@
-# Ignorar archivos generados por Visual Studio
+# Visual Studio
 .vs/
 *.user
 *.suo
+*.userosscache
+*.sln.docstates
 
-# Ignorar carpetas de compilación
+# Build results
 bin/
 obj/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+.nuget/
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# MacOS files
+.DS_Store
+
+# Resharper
+_ReSharper*/
+
+# DotCover
+*.dotCover
+
+# TeamCity
+_TeamCity*
+
+# DotTrace
+*.dotTrace
+
+# NCrunch
+*.ncrunch*
+*.ncrunchsolution
+
+# Coverage Results
+*.coverage
+*.coveragexml
+
+# Others
+*.cache
+*.pdb

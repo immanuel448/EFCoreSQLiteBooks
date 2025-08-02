@@ -61,7 +61,7 @@ namespace EFCoreSQLiteBooks
         {
             while (true)
             {
-                Console.WriteLine("\n--- MENÙ DE LIBROS ---");
+                Console.WriteLine("\n--- MENÚ DE LIBROS ---");
                 Console.WriteLine("1. Agregar libro");
                 Console.WriteLine("2. Ver todos los libros");
                 Console.WriteLine("3. Buscar libro por ID");

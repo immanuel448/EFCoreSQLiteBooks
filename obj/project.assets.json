@@ -3118,11 +3118,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
+      "projectUniqueName": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
       "projectName": "EFCoreSQLiteBooks",
-      "projectPath": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
+      "projectPath": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks.csproj",
       "packagesPath": "C:\\Users\\Experto\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\EFCoreSQLiteBooks\\obj\\",
+      "outputPath": "C:\\Users\\Experto\\source\\repos\\EFCoreSQLiteBooks\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
